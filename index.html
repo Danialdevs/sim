@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpInX - Розыгрыш</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #020617; /* Очень темный фон */
+            color: white;
+            overflow-x: hidden;
+            height: 100vh; /* На весь экран */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Фоновое свечение */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #172554 0%, #020617 60%, #000000 100%);
+        }
+
+        /* Пульсация кнопки */
+        @keyframes neon-pulse {
+            0% { box-shadow: 0 0 10px #3b82f6; }
+            50% { box-shadow: 0 0 25px #3b82f6, 0 0 10px #60a5fa; }
+            100% { box-shadow: 0 0 10px #3b82f6; }
+        }
+
+        .btn-neon {
+            animation: neon-pulse 2s infinite;
+        }
+
+        /* Анимация частиц */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Фон -->
+    <div class="bg-glow"></div>
+    <div id="particles"></div>
+
+    <!-- Контент -->
+    <main class="w-full max-w-md px-6 flex flex-col items-center text-center z-10 space-y-8">
+        
+        <!-- ЛОГОТИП -->
+        <div class="w-full flex justify-center py-4">
+            <!-- 
+                ВАЖНО: Картинка должна называться logo.png 
+            -->
+            <img src="logo.png" 
+                 alt="SpInX" 
+                 class="w-72 md:w-96 h-auto object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.7)] hover:scale-105 transition-transform duration-500">
+        </div>
+
+        <!-- ЗАГОЛОВОК И ПРЕДЛОЖЕНИЕ -->
+        <div class="space-y-4 relative">
+            <!-- Неоновая рамка -->
+            <div class="absolute inset-0 border-2 border-blue-500/50 rounded-3xl blur-md transform scale-110 -z-10 animate-pulse"></div>
+            <div class="bg-blue-900/20 border border-blue-500/30 rounded-3xl p-6 backdrop-blur-sm shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                <h1 class="text-2xl md:text-3xl font-bold tracking-wide text-gray-300 uppercase mb-2">
+                    Заходи и получай
+                </h1>
+                <div class="flex items-center justify-center space-x-3">
+                    <p class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-blue-600 drop-shadow-lg">
+                        40%
+                    </p>
+                    <span class="text-5xl md:text-6xl drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">🎁</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- КНОПКА -->
+        <div class="w-full pt-6">
+            <a href="https://t.me/tgslotgame_bot" 
+               class="btn-neon block w-full bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-600 hover:to-blue-400 text-white text-xl md:text-2xl font-black py-5 px-6 rounded-2xl transform transition active:scale-95 text-center shadow-xl relative overflow-hidden group">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    ЗАБРАТЬ БОНУС
+                </span>
+                <!-- Эффект пробегающего блика -->
+                <div class="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:animate-shine transition-all duration-700"></div>
+            </a>
+            
+            <p class="mt-6 text-xs text-blue-300/30 uppercase tracking-[0.3em]">
+                Официальный бот SpInX
+            </p>
+        </div>
+
+    </main>
+
+    <script>
+        // Создаем летающие частицы для эффекта
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 25; // Количество частиц
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 4 + 2; 
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 10;
+                
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `-${delay}s`;
+                
+                const colors = ['#1d4ed8', '#3b82f6', '#60a5fa'];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(particle);
+            }
+        }
+        
+        // Добавляем стиль анимации блика
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes shine { 100% { left: 125%; } }
+            .group:hover .group-hover\\:animate-shine { animation: shine 0.7s; }
+        `;
+        document.head.appendChild(styleSheet);
+
+        createParticles();
+    </script>
+</body>
+</html>
